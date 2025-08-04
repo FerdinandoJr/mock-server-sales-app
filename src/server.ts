@@ -2,6 +2,7 @@
 import express from 'express';
 import { faker } from '@faker-js/faker';
 import type { CompanyCustomer, Customer, CustomerType, PersonCustomer } from './domain/entities/customer';
+import { error } from 'console';
 
 const app = express();
 app.use(express.json());
@@ -67,7 +68,7 @@ app.get('/customers', (req, res) => {
 });
 
 
-// 3) Rota para pegar um por id
+// 3) Rota para pegar um cliente por id
 // Exemplo: GET http://localhost:3000/get-customer/3
 app.get('/customer/:id', (req, res) => {
   const id = Number(req.params.id);
@@ -84,6 +85,42 @@ app.get('/customer/:id', (req, res) => {
 
   res.json(customer);
 });
+
+
+
+// Usuário teste
+const fakeUsers = [
+  { id: 1, name: "Lucas", login: 'lucas', password: '123' },
+];
+
+// Rota para efetuar login
+app.post('/login', (req, res) => {
+  const { login, password } = req.body;
+
+  if (!login) {
+    return res.status(400).json({ error: 'Obrigatory login' });
+  }
+
+  if (!password) {
+    return res.status(400).json({ error: 'Obrigatory password' });
+  }
+
+  const user = fakeUsers.find(u => u.login === login && u.password === password);
+
+  if (!user) {
+    return res.status(401).json({ error: 'Invalid login' });
+  }
+
+  return res.status(200).json({ 
+    userId: user.id,
+    userCode: user.id.toString(),
+    userName: user.name,
+    token: "token",
+    message: 'Successfully logged in' 
+  });
+});
+
+
 
 // 4) Inicia o servidor
 const PORT = process.env.PORT || 3000;
