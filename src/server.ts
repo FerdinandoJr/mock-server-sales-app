@@ -4,12 +4,13 @@ import type { CompanyCustomer, Customer, CustomerType, PersonCustomer } from './
 import { generateMockCustomers } from './mock-customer';
 import { Product } from './domain/entities/product';
 import { get } from 'http';
+import { generateMockProducts } from './mock-product';
 
 const app = express();
 app.use(express.json());
 
 // 1) Gera e armazena em memória apenas uma vez
-const INITIAL_COUNT = 2000;
+const INITIAL_COUNT = 2000
 const customers: Customer[] = generateMockCustomers(INITIAL_COUNT);
 
 // Rota paginada para obter clientes por intervalo de índices
@@ -43,8 +44,8 @@ app.get('/customer/:id', (req, res) => {
 
 // Gera e armazena os produtos em memória apenas uma vez
 const PRODUCT_INITIAL_COUNT = 500
-const products: Product[] = []
-// const products: Product[] = generateMockProducts(PRODUCT_INITIAL_COUNT);
+// const products: Product[] = []
+const products: Product[] = generateMockProducts(PRODUCT_INITIAL_COUNT);
 
 app.get('/products', (req, res) => {
   const start = Number(req.query.start) || 0;
@@ -81,7 +82,7 @@ const fakeUsers = [
 // Rota para efetuar login
 app.post('/login', (req, res) => {
   const { login, password } = req.body;
-  console.log('Tentando fazer login...');
+  console.log('Trying to loggin...');
   if (!login) {
     return res.status(400).json({ error: 'Obligatory login' });
   }

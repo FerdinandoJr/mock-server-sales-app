@@ -3,8 +3,8 @@ export interface Product {
     code: string
     name: string
     description: string
-    price: DoubleRange
-    barcode: { value: number }
+    price: number
+    barcode: {  }
     unit: { value: string }
     image: { value: string }[]
     category: { value: string }[]
