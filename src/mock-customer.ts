@@ -1,5 +1,6 @@
 
 import { faker } from '@faker-js/faker';
+import { v4 as uuidv4 } from 'uuid';
 import { CompanyCustomer, Customer, CustomerType, PersonCustomer } from "./domain/entities/customer";
 
 // Função que usa faker para criar dados variados
@@ -7,8 +8,10 @@ export function generateMockCustomers(count: number): Customer[] {
   return Array.from({ length: count }, (_, i) => {
     const customerId = i + 1;
     const runtimeType: CustomerType = faker.datatype.boolean() ? 'person' : 'company';
-    const base = {
+    const base:Customer = {
       customerId,
+      customerUuId: uuidv4(),
+      serverId: customerId, // Id do banco de dados
       customerCode: customerId.toString().padStart(5, "0"),
       address: {
         state: faker.location.state(),

@@ -3,7 +3,9 @@ import { Address } from "../valueObjects/address";
 export type CustomerType = 'person' | 'company'
 
 export interface Customer {
-  customerId: number 
+  customerId: number
+  customerUuId: string
+  serverId: number  
   customerCode: string
   address: Address
   email: { value: string }
