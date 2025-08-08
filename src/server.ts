@@ -1,8 +1,9 @@
 // src/server.ts
 import express from 'express';
-import { faker } from '@faker-js/faker';
 import type { CompanyCustomer, Customer, CustomerType, PersonCustomer } from './domain/entities/customer';
-import { error } from 'console';
+import { generateMockCustomers } from './mock-customer';
+import { Product } from './domain/entities/product';
+import { get } from 'http';
 
 const app = express();
 app.use(express.json());
@@ -10,52 +11,6 @@ app.use(express.json());
 // 1) Gera e armazena em memória apenas uma vez
 const INITIAL_COUNT = 2000;
 const customers: Customer[] = generateMockCustomers(INITIAL_COUNT);
-
-// Função que usa faker para criar dados variados
-function generateMockCustomers(count: number): Customer[] {
-  return Array.from({ length: count }, (_, i) => {
-    const customerId = i + 1;
-    const runtimeType: CustomerType = faker.datatype.boolean() ? 'person' : 'company';
-    const base = {
-      customerId,
-      customerCode: customerId.toString().padStart(5, "0"),
-      address: {
-        state: faker.location.state(),
-        city: faker.location.city(),
-        street: faker.location.streetAddress(),
-        cep: { 'value' :  faker.location.zipCode('#####-###')},
-      },
-      email: { 'value' :  faker.internet.email()},
-      phones: Array.from(
-        { length: faker.number.int({ min: 1, max: 3 }) },
-        () => ({ 'value' :  faker.phone.number()})
-      ),
-      isActive: faker.datatype.boolean(),
-      createdAt: faker.date.past().toISOString(),
-      runtimeType,
-    };
-
-    if (runtimeType === 'person') {
-      const person: PersonCustomer = {
-        ...base,
-        runtimeType: 'person',
-        fullName: faker.person.fullName(),
-        cpf: { 'value' :  faker.string.numeric(11)},
-      };
-      return person;
-    } else {
-      const company: CompanyCustomer = {
-        ...base,
-        runtimeType: 'company',
-        legalName: faker.company.name(),
-        tradeName: faker.company.name(),
-        cnpj: { 'value' :  faker.string.numeric(14)},
-      };
-      return company;
-    }
-  });
-}
-
 
 // Rota paginada para obter clientes por intervalo de índices
 app.get('/customers', (req, res) => {  
@@ -86,7 +41,37 @@ app.get('/customer/:id', (req, res) => {
   res.json(customer);
 });
 
+// Gera e armazena os produtos em memória apenas uma vez
+const PRODUCT_INITIAL_COUNT = 500
+const products: Product[] = []
+// const products: Product[] = generateMockProducts(PRODUCT_INITIAL_COUNT);
 
+app.get('/products', (req, res) => {
+  const start = Number(req.query.start) || 0;
+  const limit = Number(req.query.limit) || 50;
+  console.log(`consultou todos os product (${start} até ${limit + start})`)
+
+  const slice = products.slice(start, start + limit);
+  res.json({ total: products.length, start, limit, data: slice });
+});
+
+// Rota para pegar um produto por id
+// Exemplo: GET http://localhost:3000/get-product/3
+app.get('/products/:id', (req, res) => {
+  const id = Number(req.params.id);
+  console.log(`consultou product '${id}'`)
+  if (isNaN(id)) {
+    return res.status(400).json({ error: 'Invalid id parameter' });
+  }
+
+  const product = products.find(p => p.productId === id);
+
+  if (!product) {
+    return res.status(404).json({ error: 'Product not found' });
+  }
+
+  res.json(product);
+});
 
 // Usuário teste
 const fakeUsers = [
@@ -96,13 +81,13 @@ const fakeUsers = [
 // Rota para efetuar login
 app.post('/login', (req, res) => {
   const { login, password } = req.body;
-
+  console.log('Tentando fazer login...');
   if (!login) {
-    return res.status(400).json({ error: 'Obrigatory login' });
+    return res.status(400).json({ error: 'Obligatory login' });
   }
 
   if (!password) {
-    return res.status(400).json({ error: 'Obrigatory password' });
+    return res.status(400).json({ error: 'Obligatory password' });
   }
 
   const user = fakeUsers.find(u => u.login === login && u.password === password);
