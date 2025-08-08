@@ -23,6 +23,27 @@ app.get('/customers', (req, res) => {
   res.json({ total: customers.length, start, limit, data: slice });
 });
 
+app.post('/customers', (req, res) => {
+  const data = req.body;
+
+  // gera id simples (incremental)
+  const newId = customers.length > 0
+    ? customers[customers.length - 1].customerId + 1
+    : 1;
+
+  const newCustomer = {
+    id: newId,
+    ...data
+  };
+
+  customers.push(newCustomer);
+
+  console.log(`novo customer criado: ${JSON.stringify(newCustomer)}`);
+
+  // retorna apenas o id
+  res.status(201).json({ serverId: newId });
+});
+
 
 // 3) Rota para pegar um cliente por id
 // Exemplo: GET http://localhost:3000/get-customer/3
