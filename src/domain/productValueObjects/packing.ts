@@ -1,8 +1,9 @@
-import { Unit } from "@faker-js/faker/.";
+import { Barcode } from "./barcode";
+import { Unit } from "./unit";
 
 export interface Packing {
     packingId: number,
-    barcode: [],
+    barcode: Barcode | null,
     unit: Unit
     quantity: number
     description: string

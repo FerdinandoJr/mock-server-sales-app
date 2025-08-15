@@ -5,6 +5,7 @@ import { generateMockCustomers } from './mock-customer';
 import { Product } from './domain/entities/product';
 import { get } from 'http';
 import { generateMockProducts } from './mock-product';
+import path from 'path';
 
 const app = express();
 app.use(express.json());
@@ -123,11 +124,11 @@ app.post('/login', (req, res) => {
     userCode: user.id.toString(),
     userName: user.name,
     token: "token",
-    message: 'Successfully logged in' 
+    message: 'Successfully logged in'
   });
 });
 
-
+app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 
 // 4) Inicia o servidor
 const PORT = process.env.PORT || 3000;
