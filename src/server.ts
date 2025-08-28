@@ -6,6 +6,7 @@ import { Product } from './domain/entities/product';
 import { get } from 'http';
 import { generateMockProducts } from './mock-product';
 import path from 'path';
+import { generateMockUser } from './mock-user';
 
 const app = express();
 app.use(express.json());
@@ -119,13 +120,7 @@ app.post('/login', (req, res) => {
     return res.status(401).json({ error: 'Invalid login' });
   }
 
-  return res.status(200).json({ 
-    userId: user.id,
-    userCode: user.id.toString(),
-    userName: user.name,
-    token: "token",
-    message: 'Successfully logged in'
-  });
+  return res.status(200).json(generateMockUser());
 });
 
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
