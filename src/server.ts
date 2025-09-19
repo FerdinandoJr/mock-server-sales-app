@@ -7,6 +7,9 @@ import { get } from 'http';
 import { generateMockProducts } from './mock-product';
 import path from 'path';
 import { generateMockUser } from './mock-user';
+import { OrderStatus } from './domain/orderValueObjects/order_status';
+import { generateMockOrders } from './mock-order';
+import { Order } from './domain/entities/order';
 
 const app = express();
 app.use(express.json());
@@ -95,6 +98,37 @@ app.get('/products/:id', (req, res) => {
   }
 
   res.json(product);
+});
+
+// Gera e armazena os pedidos em memória apenas uma vez
+const ORDER_INITIAL_COUNT = 50
+const orders: Order[] = generateMockOrders(ORDER_INITIAL_COUNT);
+
+app.get('/orders', (req, res) => {
+  const start = Number(req.query.start) || 0;
+  const limit = Number(req.query.limit) || 10;
+  console.log(`consultou todos os orders (${start} até ${limit + start})`)
+
+  const slice = orders.slice(start, start + limit);
+  res.json({ total: orders.length, start, limit, data: slice });
+});
+
+// Rota para pegar um pedido por id
+// Exemplo: GET http://localhost:3000/get-order/3
+app.get('/order/:id', (req, res) => {
+  const id = Number(req.params.id);
+  console.log(`consultou order '${id}'`)
+  if (isNaN(id)) {
+    return res.status(400).json({ error: 'Invalid id parameter' });
+  }
+
+  const order = orders.find(o => o.orderId === id);
+
+  if (!order) {
+    return res.status(404).json({ error: 'Order not found' });
+  }
+
+  res.json(order);
 });
 
 // Usuário teste

@@ -24,7 +24,7 @@ export function generateMockCustomers(count: number): Customer[] {
         state: faker.location.state(),
         city: faker.location.city(),
         street: faker.location.streetAddress(),
-        cep: { 'value' :  faker.location.zipCode('#####-###')},
+        cep: { 'value' : faker.location.zipCode('#####-###')},
       },
       paymentMethods: generateUniquePaymentMethods(),
       taxRegime: faker.helpers.arrayElement(Object.keys(TaxRegime).filter(k => isNaN(Number(k))) as TaxRegimeName[]),
