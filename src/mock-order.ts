@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker/.";
+import { faker } from "@faker-js/faker";
 import { v4 as uuidv4 } from 'uuid';
 import { OrderStatus } from "./domain/orderValueObjects/order_status";
 import { Order } from "./domain/entities/order";
@@ -22,7 +22,7 @@ export function generateMockOrders(count: number): Order[] {
          confirmedAt: new Date(getTodayDate()),
          cancelledAt: new Date(getTodayDate()),
          notes: generateOrderNote(),
-         items: generateOrderItems(orderId),
+         items: [generateOrderItems(orderId)],
          freight: calculateFreight(),
          itemsSubtotal: calculateItemsSubtotal(),
          discountTotal: calculateDiscountTotal(),
@@ -61,10 +61,22 @@ function generateOrderItems(orderId: number): OrderProduct {
     productId: faker.number.int({ min: 1, max: 1000 }),
     name: faker.commerce.productName(),
     quantity,
-    unitPrice: new Money(price),
+    unitPrice: {
+      amount: price,
+      currency: 'BRL',
+      scale: 2
+    } as Money,
     orderId,
-    discountAmount: new Money(0),
-    taxAmount: new Money(price * 0.1),
+    discountAmount: {
+      amount: price,
+      currency: 'BRL',
+      scale: 2
+    } as Money,
+    taxAmount: {
+      amount: price * 0.1,
+      currency: 'BRL',
+      scale: 2
+    } as Money,
   };
 }
 
@@ -87,12 +99,7 @@ function calculateItemsSubtotal() {
 }
 
 function calculateDiscountTotal() {
-   const discountTotalPrice = faker.number.int({
-      min: 1,
-      max: 100,
-   });
-
-   return `%${discountTotalPrice}`;
+   return faker.number.int({min: 1, max: 100});
 }
 
 function calculateTaxTotal() {
@@ -110,7 +117,7 @@ function calculateGrandTotal() {
    const discount = calculateDiscountTotal();
    const tax = calculateTaxTotal();
 
-   const discountPercent = parseFloat(discount.replace('%', '')) / 100;
+   const discountPercent = discount / 100;
 
    const discountValue = itemsSubtotal * discountPercent;
    const grandTotal = itemsSubtotal + freight + tax - discountValue;
