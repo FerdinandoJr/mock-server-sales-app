@@ -1,5 +1,5 @@
 export enum OrderStatus {
-   draft,
-   confirmed,
-   cancelled
+   draft = "draft",
+   confirmed = "confirmed",
+   cancelled = "cancelled"
 }

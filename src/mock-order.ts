@@ -22,14 +22,29 @@ export function generateMockOrders(count: number): Order[] {
          confirmedAt: new Date(getTodayDate()),
          cancelledAt: new Date(getTodayDate()),
          notes: generateOrderNote(),
-         items: [generateOrderItems(orderId)],
-         freight: calculateFreight(),
-         itemsSubtotal: calculateItemsSubtotal(),
-         discountTotal: calculateDiscountTotal(),
-         taxTotal: calculateTaxTotal(),
-         grandTotal: calculateGrandTotal(),
+         items: generateOrderItems(orderId),
+         freight: generateFakeMoney(),
+         itemsSubtotal: generateFakeMoney(),
+         discountTotal: generateFakeMoney(),
+         taxTotal: generateFakeMoney(),
+         grandTotal: generateFakeMoney(),
       }
    });
+}
+
+// Lista básica de moedas comuns
+const currencies = ["BRL"];
+
+function generateFakeMoney(): Money {
+  const currency = faker.helpers.arrayElement(currencies);
+  const scale = faker.number.int({ min: 0, max: 3 }); // até 4 casas decimais
+  const amount = parseInt(faker.finance.amount({ min: 1, max: 100000, dec: 0 }));
+
+  return {
+    amount,
+    currency,
+    scale,
+  };
 }
 
 function getTodayDate(): Date {
@@ -37,12 +52,8 @@ function getTodayDate(): Date {
 }
 
 function getRandomStatus(): OrderStatus {
-   const status = Object.values(OrderStatus).filter(
-      (value) => typeof value === 'number'
-   ) as OrderStatus[];
-
-   const randomIndex = Math.floor(Math.random() * status.length);
-   return status[randomIndex];
+   const status = Object.values(OrderStatus);
+   return status[Math.floor(Math.random() * status.length)];
 }
 
 function generateOrderNote(): string {
@@ -51,12 +62,12 @@ function generateOrderNote(): string {
    return faker.lorem.sentence();
 }
 
-/// TODO: Arrumar esse trecho
-function generateOrderItems(orderId: number): OrderProduct {
-  const price = faker.number.float({ min: 1, max: 100 });
-  const quantity = faker.number.int({ min: 1, max: 100 });
 
-  return {
+function generateOrderProduct(orderId: number): OrderProduct {
+   const price = faker.number.float({ min: 1, max: 100 });
+   const quantity = faker.number.int({ min: 1, max: 100 });
+
+   return {
     productUuId: faker.string.uuid(),
     productId: faker.number.int({ min: 1, max: 1000 }),
     name: faker.commerce.productName(),
@@ -77,50 +88,12 @@ function generateOrderItems(orderId: number): OrderProduct {
       currency: 'BRL',
       scale: 2
     } as Money,
-  };
+  }
+
 }
 
-function calculateFreight() {
-   const freightPrice = faker.number.float({
-      min: 0,
-      max: 50,
-   });
-
-   return freightPrice;
-}
-
-function calculateItemsSubtotal() {
-   const itemsSubtotalPrice = faker.number.float({
-      min: 1,
-      max: 100,
-   });
-
-   return itemsSubtotalPrice;
-}
-
-function calculateDiscountTotal() {
-   return faker.number.int({min: 1, max: 100});
-}
-
-function calculateTaxTotal() {
-   const taxTotalPrice = faker.number.float({
-      min: 5,
-      max: 80,
-   });
-
-   return taxTotalPrice;
-}
-
-function calculateGrandTotal() {
-   const freight = calculateFreight();
-   const itemsSubtotal = calculateItemsSubtotal();
-   const discount = calculateDiscountTotal();
-   const tax = calculateTaxTotal();
-
-   const discountPercent = discount / 100;
-
-   const discountValue = itemsSubtotal * discountPercent;
-   const grandTotal = itemsSubtotal + freight + tax - discountValue;
-
-   return grandTotal;
+function generateOrderItems(orderId: number): OrderProduct[] {
+   return Array.from({ length: faker.number.int({ min: 1, max: 500 }) }, (_, i) => 
+      generateOrderProduct(orderId)
+   );
 }
