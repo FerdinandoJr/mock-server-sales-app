@@ -107,9 +107,25 @@ const orders: Order[] = generateMockOrders(ORDER_INITIAL_COUNT);
 app.get('/orders', (req, res) => {
   const start = Number(req.query.start) || 0;
   const limit = Number(req.query.limit) || 10;
-  console.log(`consultou todos os orders (${start} até ${limit + start})`)
+  const withProducts = req.query.withProducts || false;
+  
+  console.log(withProducts)
 
   const slice = orders.slice(start, start + limit);
+  
+  if (!withProducts) {
+    console.log(`consultou todos os orders (${start} até ${limit + start}) sem produtos (${withProducts})`)
+    const filter = slice.map(o => ({
+      ...o,
+      items: []
+    }))
+
+    res.json({ total: orders.length, start, limit, data: filter })
+    return;
+  }
+  
+  console.log(`consultou todos os orders (${start} até ${limit + start}) (${withProducts})`)
+
   res.json({ total: orders.length, start, limit, data: slice });
 });
 

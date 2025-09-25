@@ -10,6 +10,8 @@ export function generateMockOrders(count: number): Order[] {
       const orderId = i + 1;
       const customerId = i + 1;
 
+      const items = generateOrderItems(orderId)
+
       return {
          orderId,
          orderUuId: uuidv4(),
@@ -22,7 +24,8 @@ export function generateMockOrders(count: number): Order[] {
          confirmedAt: new Date(getTodayDate()),
          cancelledAt: new Date(getTodayDate()),
          notes: generateOrderNote(),
-         items: generateOrderItems(orderId),
+         itemsCount: items.length,
+         items: items,
          freight: generateFakeMoney(),
          itemsSubtotal: generateFakeMoney(),
          discountTotal: generateFakeMoney(),
@@ -38,7 +41,7 @@ const currencies = ["BRL"];
 function generateFakeMoney(): Money {
   const currency = faker.helpers.arrayElement(currencies);
   const scale = faker.number.int({ min: 0, max: 3 }); // até 4 casas decimais
-  const amount = parseInt(faker.finance.amount({ min: 1, max: 100000, dec: 0 }));
+  const amount = parseInt(faker.finance.amount({ min: 20, max: 500, dec: 0 }));
 
   return {
     amount,
@@ -70,7 +73,7 @@ function generateOrderProduct(orderId: number): OrderProduct {
    return {
     productUuId: faker.string.uuid(),
     productId: faker.number.int({ min: 1, max: 1000 }),
-    name: faker.commerce.productName(),
+    name: faker.commerce.productName() +" " + faker.commerce.productName() +" "+ faker.commerce.productName(),
     quantity,
     unitPrice: {
       amount: price,
@@ -93,7 +96,7 @@ function generateOrderProduct(orderId: number): OrderProduct {
 }
 
 function generateOrderItems(orderId: number): OrderProduct[] {
-   return Array.from({ length: faker.number.int({ min: 1, max: 500 }) }, (_, i) => 
+   return Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, (_, i) => 
       generateOrderProduct(orderId)
    );
 }

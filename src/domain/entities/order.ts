@@ -1,5 +1,6 @@
 import { OrderProduct } from "../orderValueObjects/order_product";
 import { OrderStatus } from "../orderValueObjects/order_status";
+import { Money } from "../valueObjects/money";
 
 export interface Order {
    orderId: number,
@@ -13,10 +14,11 @@ export interface Order {
    confirmedAt: Date,
    cancelledAt: Date,
    notes: string,
+   itemsCount: number,
    items: OrderProduct[],
-   freight: number,
-   itemsSubtotal: number,
-   discountTotal: number,
-   taxTotal: number,
-   grandTotal: number
+   freight: Money,
+   itemsSubtotal: Money,
+   discountTotal: Money,
+   taxTotal: Money,
+   grandTotal: Money
 }
