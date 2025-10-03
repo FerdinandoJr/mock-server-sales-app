@@ -1,3 +1,4 @@
+import { OrderCustomer } from "../orderValueObjects/order_customer";
 import { OrderProduct } from "../orderValueObjects/order_product";
 import { OrderStatus } from "../orderValueObjects/order_status";
 import { Money } from "../valueObjects/money";
@@ -8,8 +9,7 @@ export interface Order {
    orderCode: string,
    createdAt: Date,
    serverId: number,
-   customerId: number,
-   customerName: string,
+   customer: OrderCustomer,
    status: OrderStatus,
    confirmedAt: Date,
    cancelledAt: Date,

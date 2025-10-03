@@ -4,6 +4,9 @@ import { OrderStatus } from "./domain/orderValueObjects/order_status";
 import { Order } from "./domain/entities/order";
 import { OrderProduct } from "./domain/orderValueObjects/order_product";
 import { Money } from "./domain/valueObjects/money";
+import { OrderCustomer } from "./domain/orderValueObjects/order_customer";
+import { Phone, PhoneType, PhoneTypeName } from "./domain/valueObjects/phone";
+import { ContactInfo } from "./domain/valueObjects/contact-info";
 
 export function generateMockOrders(count: number): Order[] {
    return Array.from({ length: count }, (_, i) => {
@@ -11,6 +14,7 @@ export function generateMockOrders(count: number): Order[] {
       const customerId = i + 1;
 
       const items = generateOrderItems(orderId)
+      const customers = generateOrderCustomers(orderId)
 
       return {
          orderId,
@@ -18,14 +22,13 @@ export function generateMockOrders(count: number): Order[] {
          serverId: orderId,
          orderCode: orderId.toString().padStart(5, "0"),
          createdAt: new Date(getTodayDate()),
-         customerId,
-         customerName: faker.person.fullName(),
          status: getRandomStatus(),
          confirmedAt: new Date(getTodayDate()),
          cancelledAt: new Date(getTodayDate()),
          notes: generateOrderNote(),
          itemsCount: items.length,
          items: items,
+         customer: customers,
          freight: generateFakeMoney(),
          itemsSubtotal: generateFakeMoney(),
          discountTotal: generateFakeMoney(),
@@ -99,4 +102,51 @@ function generateOrderItems(orderId: number): OrderProduct[] {
    return Array.from({ length: faker.number.int({ min: 1, max: 3 }) }, (_, i) => 
       generateOrderProduct(orderId)
    );
+}
+
+function generateOrderCustomers(orderId: number): OrderCustomer {
+   return {
+      customerId: faker.number.int({ min: 1, max: 1000 }),
+      customerCode: faker.string.alphanumeric(8),
+      customerUuId: faker.string.uuid(),
+      customerName: faker.person.fullName(),
+      email: [generateFakeContactInfo()],
+      phone: generateFakePhone(),
+      cpf: { 'value' :  faker.string.numeric(11)},
+      cnpj: { 'value' : faker.string.numeric(14)},
+      orderId,
+   }
+}
+
+function generateFakeContactInfo(isPrimary = false): ContactInfo {
+  return {
+    name: faker.person.fullName(),
+    email: { value: faker.internet.email() },
+    phone: generateFakePhone(),
+    isPrimary,
+  };
+}
+
+function generateFakePhone(): Phone {
+  // escolhe tipo de telefone aleatório
+  const types = Object.keys(PhoneType).filter(k => isNaN(Number(k))) as PhoneTypeName[];
+  const type = faker.helpers.arrayElement(types);
+
+  let number: string;
+  switch (type) {
+    case 'mobile':
+    case 'whatsapp':
+      number = faker.location.zipCode('+55 ## 9####-####'); // padrão BR celular
+      break;
+    case 'landline':
+      number = faker.location.zipCode('+55 ## ####-####'); // fixo
+      break;
+    default:
+      number = faker.location.zipCode('+55 ## ####-####'); // fallback
+  }
+
+  return {
+    value: number,
+    type,
+  };
 }
