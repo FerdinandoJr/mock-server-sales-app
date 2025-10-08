@@ -2,6 +2,7 @@ import { OrderCustomer } from "../orderValueObjects/order_customer";
 import { OrderProduct } from "../orderValueObjects/order_product";
 import { OrderStatus } from "../orderValueObjects/order_status";
 import { Money } from "../valueObjects/money";
+import { PaymentMethod } from "../valueObjects/payment-method";
 
 export interface Order {
    orderId: number,
@@ -16,6 +17,7 @@ export interface Order {
    notes: string,
    itemsCount: number,
    items: OrderProduct[],
+   paymentMethod: PaymentMethod[]
    freight: Money,
    itemsSubtotal: Money,
    discountTotal: Money,

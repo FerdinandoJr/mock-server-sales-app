@@ -7,6 +7,7 @@ import { Money } from "./domain/valueObjects/money";
 import { OrderCustomer } from "./domain/orderValueObjects/order_customer";
 import { Phone, PhoneType, PhoneTypeName } from "./domain/valueObjects/phone";
 import { ContactInfo } from "./domain/valueObjects/contact-info";
+import { PaymentMethod } from "./domain/valueObjects/payment-method";
 
 export function generateMockOrders(count: number): Order[] {
    return Array.from({ length: count }, (_, i) => {
@@ -29,6 +30,7 @@ export function generateMockOrders(count: number): Order[] {
          itemsCount: items.length,
          items: items,
          customer: customers,
+         paymentMethod: [generatePaymentMethod()],
          freight: generateFakeMoney(),
          itemsSubtotal: generateFakeMoney(),
          discountTotal: generateFakeMoney(),
@@ -70,12 +72,14 @@ function generateOrderNote(): string {
 
 
 function generateOrderProduct(orderId: number): OrderProduct {
+  const productId = faker.number.int({ min: 1, max: 1000 });
    const price = faker.number.float({ min: 1, max: 100 });
    const quantity = faker.number.int({ min: 1, max: 100 });
 
    return {
     productUuId: faker.string.uuid(),
-    productId: faker.number.int({ min: 1, max: 1000 }),
+    productId: productId,
+    productCode: productId.toString().padStart(5, "0"),
     name: faker.commerce.productName() +" " + faker.commerce.productName() +" "+ faker.commerce.productName(),
     quantity,
     unitPrice: {
@@ -115,6 +119,12 @@ function generateOrderCustomers(orderId: number): OrderCustomer {
       cnpj: { 'value' : faker.string.numeric(14)},
       orderId,
    }
+}
+
+function generatePaymentMethod(): PaymentMethod {
+  const values = Object.values(PaymentMethod).filter(v => typeof v === "number") as number[];
+  const randomValue = faker.helpers.arrayElement(values);
+  return randomValue as PaymentMethod;
 }
 
 function generateFakeContactInfo(isPrimary = false): ContactInfo {
