@@ -7,7 +7,7 @@ import { Money } from "./domain/valueObjects/money";
 import { OrderCustomer } from "./domain/orderValueObjects/order_customer";
 import { Phone, PhoneType, PhoneTypeName } from "./domain/valueObjects/phone";
 import { ContactInfo } from "./domain/valueObjects/contact-info";
-import { PaymentMethod } from "./domain/valueObjects/payment-method";
+import { PaymentMethod, PaymentMethodName } from "./domain/valueObjects/payment-method";
 
 export function generateMockOrders(count: number): Order[] {
    return Array.from({ length: count }, (_, i) => {
@@ -16,6 +16,7 @@ export function generateMockOrders(count: number): Order[] {
 
       const items = generateOrderItems(orderId)
       const customers = generateOrderCustomers(orderId)
+      // const orderPayment = 0
 
       return {
          orderId,
@@ -30,7 +31,8 @@ export function generateMockOrders(count: number): Order[] {
          itemsCount: items.length,
          items: items,
          customer: customers,
-         paymentMethod: [generatePaymentMethod()],
+        //  orderPayment: orderPayment,
+         paymentMethod: generateUniquePaymentMethods(),
          freight: generateFakeMoney(),
          itemsSubtotal: generateFakeMoney(),
          discountTotal: generateFakeMoney(),
@@ -121,10 +123,15 @@ function generateOrderCustomers(orderId: number): OrderCustomer {
    }
 }
 
-function generatePaymentMethod(): PaymentMethod {
-  const values = Object.values(PaymentMethod).filter(v => typeof v === "number") as number[];
-  const randomValue = faker.helpers.arrayElement(values);
-  return randomValue as PaymentMethod;
+function generateUniquePaymentMethods(): PaymentMethodName[] {
+  const types = Object.keys(PaymentMethod).filter(k => isNaN(Number(k))) as PaymentMethodName[];
+
+  // embaralha os valores
+  const shuffled = faker.helpers.shuffle(types);
+
+  const count = faker.datatype.boolean() ? faker.number.int({min: 1, max: 4 }) : null
+  // se não passar count, retorna todos
+  return shuffled.slice(0, count ?? types.length);
 }
 
 function generateFakeContactInfo(isPrimary = false): ContactInfo {
