@@ -16,6 +16,7 @@ export interface Order {
    cancelledAt: Date,
    notes: string,
    itemsCount: number,
+   total: Money,
    items: OrderProduct[],
    // orderPayment: OrderPayment[],
    paymentMethod: PaymentMethodName[],

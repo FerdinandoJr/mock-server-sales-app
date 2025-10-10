@@ -13,7 +13,7 @@ export interface Product {
    price: number
    barcode: Barcode | null
    unit: Unit
-   images: Image []
+   images: Image[]
    categories: Category[]
    packings: Packing[]
    properties: Property[]

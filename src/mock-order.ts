@@ -8,6 +8,7 @@ import { OrderCustomer } from "./domain/orderValueObjects/order_customer";
 import { Phone, PhoneType, PhoneTypeName } from "./domain/valueObjects/phone";
 import { ContactInfo } from "./domain/valueObjects/contact-info";
 import { PaymentMethod, PaymentMethodName } from "./domain/valueObjects/payment-method";
+import { Image } from "./domain/productValueObjects/image";
 
 export function generateMockOrders(count: number): Order[] {
    return Array.from({ length: count }, (_, i) => {
@@ -16,6 +17,14 @@ export function generateMockOrders(count: number): Order[] {
 
       const items = generateOrderItems(orderId)
       const customers = generateOrderCustomers(orderId)
+      const total = items.reduce((acc, it) => {
+        return acc + (((it.unitPrice.amount / 100) * it.quantity) - ((it.discountAmount.amount / 100)) + ((it.taxAmount.amount / 100)));
+      }, 0);
+
+      const totalMoney = generateFakeMoney()
+      totalMoney.amount = total * 100
+
+
       // const orderPayment = 0
 
       return {
@@ -29,6 +38,7 @@ export function generateMockOrders(count: number): Order[] {
          cancelledAt: new Date(getTodayDate()),
          notes: generateOrderNote(),
          itemsCount: items.length,
+         total: totalMoney,
          items: items,
          customer: customers,
         //  orderPayment: orderPayment,
@@ -47,8 +57,8 @@ const currencies = ["BRL"];
 
 function generateFakeMoney(): Money {
   const currency = faker.helpers.arrayElement(currencies);
-  const scale = faker.number.int({ min: 0, max: 3 }); // até 4 casas decimais
-  const amount = parseInt(faker.finance.amount({ min: 20, max: 500, dec: 0 }));
+  const scale = 2; // faker.number.int({ min: 0, max: 3 }); // até 4 casas decimais
+  const amount = faker.number.int({ min: 20, max: 500});
 
   return {
     amount,
@@ -72,11 +82,9 @@ function generateOrderNote(): string {
    return faker.lorem.sentence();
 }
 
-
 function generateOrderProduct(orderId: number): OrderProduct {
-  const productId = faker.number.int({ min: 1, max: 1000 });
-   const price = faker.number.float({ min: 1, max: 100 });
-   const quantity = faker.number.int({ min: 1, max: 100 });
+    const productId = faker.number.int({ min: 1, max: 1000 });
+    const quantity = faker.number.int({ min: 1, max: 100 });
 
    return {
     productUuId: faker.string.uuid(),
@@ -84,24 +92,40 @@ function generateOrderProduct(orderId: number): OrderProduct {
     productCode: productId.toString().padStart(5, "0"),
     name: faker.commerce.productName() +" " + faker.commerce.productName() +" "+ faker.commerce.productName(),
     quantity,
-    unitPrice: {
-      amount: price,
-      currency: 'BRL',
-      scale: 2
-    } as Money,
+    unitPrice: generateFakeMoney(),
     orderId,
-    discountAmount: {
-      amount: price,
-      currency: 'BRL',
-      scale: 2
-    } as Money,
-    taxAmount: {
-      amount: price * 0.1,
-      currency: 'BRL',
-      scale: 2
-    } as Money,
+    discountAmount: generateFakeMoney(),
+    taxAmount: generateFakeMoney(),
+    images: getRandomImage(),
   }
 
+}
+
+const localImages = [
+  'img1.jpg',
+  'img2.png',
+  'img3.webp',
+  'img4.webp',
+  'img5.jpg',
+  'img6.jpg',
+  'img7.jpg',
+  'img8.webp',
+  'img9.webp',
+  'img10.webp'
+];
+
+// Função para pegar imagem aleatória
+function getRandomImage() : Image[] {
+  const count = Math.floor(Math.random() * 6); // 0 até 5
+  const images = [];
+  for (let i = 0; i < count; i++) {
+    const randomIndex = Math.floor(Math.random() * localImages.length);
+    images.push({
+        imageId: i + 1,
+        url: `http://192.168.254.195:3000/images/${localImages[randomIndex]}`
+    });
+  }
+  return images;
 }
 
 function generateOrderItems(orderId: number): OrderProduct[] {
