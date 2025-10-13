@@ -1,14 +1,15 @@
 import { faker } from "@faker-js/faker";
 import { v4 as uuidv4 } from 'uuid';
-import { OrderStatus } from "./domain/orderValueObjects/order_status";
-import { Order } from "./domain/entities/order";
-import { OrderProduct } from "./domain/orderValueObjects/order_product";
-import { Money } from "./domain/valueObjects/money";
-import { OrderCustomer } from "./domain/orderValueObjects/order_customer";
-import { Phone, PhoneType, PhoneTypeName } from "./domain/valueObjects/phone";
-import { ContactInfo } from "./domain/valueObjects/contact-info";
-import { PaymentMethod, PaymentMethodName } from "./domain/valueObjects/payment-method";
-import { Image } from "./domain/productValueObjects/image";
+import { Order } from "./entities/order";
+import { OrderProduct } from "./valuesObjects/order_product";
+import { OrderStatus } from "./valuesObjects/order_status";
+import { Money } from "../../domain/valueObjects/money";
+import { Image } from "../products/valuesObjects/image";
+import { OrderCustomer } from "./valuesObjects/order_customer";
+import { ContactInfo } from "../../domain/valueObjects/contact-info";
+import { PaymentMethod, PaymentMethodName } from "../../domain/valueObjects/payment-method";
+import { Phone, PhoneType, PhoneTypeName } from "../../domain/valueObjects/phone";
+
 
 export function generateMockOrders(count: number): Order[] {
    return Array.from({ length: count }, (_, i) => {
