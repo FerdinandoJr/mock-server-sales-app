@@ -1,14 +1,15 @@
 
 import { faker } from '@faker-js/faker';
 import { v4 as uuidv4 } from 'uuid';
-import { CompanyCustomer, Customer, CustomerType, PersonCustomer } from "./domain/entities/customer";
-import { StateRegistration, UF, UFName } from './domain/valueObjects/state-registration';
-import { Money } from './domain/valueObjects/money';
-import { CreditLimit } from './domain/valueObjects/credit-limit';
-import { ContactInfo } from './domain/valueObjects/contact-info';
-import { TaxRegime, TaxRegimeName } from './domain/valueObjects/tax-regime';
-import { PaymentMethod, PaymentMethodName } from './domain/valueObjects/payment-method';
-import { Phone, PhoneType, PhoneTypeName } from './domain/valueObjects/phone';
+import { CompanyCustomer, Customer, CustomerType, PersonCustomer } from './entities/customer';
+import { TaxRegime, TaxRegimeName } from '../../domain/valueObjects/tax-regime';
+import { StateRegistration, UF, UFName } from '../../domain/valueObjects/state-registration';
+import { CreditLimit } from '../../domain/valueObjects/credit-limit';
+import { Money } from '../../domain/valueObjects/money';
+import { Phone, PhoneType, PhoneTypeName } from '../../domain/valueObjects/phone';
+import { ContactInfo } from '../../domain/valueObjects/contact-info';
+import { PaymentMethod, PaymentMethodName } from '../../domain/valueObjects/payment-method';
+
 
 // Função que usa faker para criar dados variados
 export function generateMockCustomers(count: number): Customer[] {

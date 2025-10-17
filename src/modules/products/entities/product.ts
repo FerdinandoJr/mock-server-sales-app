@@ -1,9 +1,10 @@
-import { Barcode } from "../productValueObjects/barcode"
-import { Category } from "../productValueObjects/category"
-import { Image } from "../productValueObjects/image"
-import { Packing } from "../productValueObjects/packing"
-import { Property } from "../productValueObjects/property"
-import { Unit } from "../productValueObjects/unit"
+import { Barcode } from "../valuesObjects/barcode"
+import { Category } from "../valuesObjects/category"
+import { Image } from "../valuesObjects/image"
+import { Packing } from "../valuesObjects/packing"
+import { Property } from "../valuesObjects/property"
+import { Unit } from "../valuesObjects/unit"
+
 
 export interface Product {
    productId: number

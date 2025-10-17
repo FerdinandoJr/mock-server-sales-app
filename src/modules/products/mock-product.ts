@@ -1,11 +1,11 @@
 import { faker } from '@faker-js/faker';
-import { Product } from './domain/entities/product';
-import { Category } from './domain/productValueObjects/category';
-import { Barcode } from './domain/productValueObjects/barcode';
-import { Packing } from './domain/productValueObjects/packing';
-import { Image } from './domain/productValueObjects/image';
-import { Property } from './domain/productValueObjects/property';
-import { PropertyValue } from './domain/productValueObjects/property_value';
+import { Image } from './valuesObjects/image';
+import { Category } from './valuesObjects/category';
+import { Barcode } from './valuesObjects/barcode';
+import { Packing } from './valuesObjects/packing';
+import { PropertyValue } from './valuesObjects/property_value';
+import { Property } from './valuesObjects/property';
+import { Product } from './entities/product';
 
 // Função que usa o faker para criar dados variados
 export function generateMockProducts(count: number): Product[] {

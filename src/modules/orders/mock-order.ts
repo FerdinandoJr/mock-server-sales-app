@@ -1,13 +1,13 @@
 import { faker } from "@faker-js/faker";
 import { v4 as uuidv4 } from 'uuid';
 import { Order } from "./entities/order";
-import { OrderProduct } from "./valuesObjects/order_product";
-import { OrderStatus } from "./valuesObjects/order_status";
 import { Money } from "../../domain/valueObjects/money";
+import { OrderStatus } from "./valuesObjects/order_status";
+import { OrderProduct } from "./valuesObjects/order_product";
 import { Image } from "../products/valuesObjects/image";
 import { OrderCustomer } from "./valuesObjects/order_customer";
-import { ContactInfo } from "../../domain/valueObjects/contact-info";
 import { PaymentMethod, PaymentMethodName } from "../../domain/valueObjects/payment-method";
+import { ContactInfo } from "../../domain/valueObjects/contact-info";
 import { Phone, PhoneType, PhoneTypeName } from "../../domain/valueObjects/phone";
 
 

@@ -1,7 +1,7 @@
-import { User } from "./domain/entities/user";
+import { User } from "./entities/user";
 import { faker } from '@faker-js/faker';
 import { v4 as uuidv4 } from 'uuid';
-import { Company } from "./domain/entities/company";
+import { Company } from "./entities/company";
 
 
 export function generateMockUser(): User {
