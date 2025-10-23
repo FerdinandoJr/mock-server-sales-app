@@ -49,7 +49,7 @@ function getRandomImages() : Image[] {
     const randomIndex = Math.floor(Math.random() * localImages.length);
     images.push({
         imageId: i + 1,
-        url: `http://192.168.254.195:3000/images/${localImages[randomIndex]}`
+        url: `http://192.168.254.26:3000/images/${localImages[randomIndex]}`
     });
   }
   return images;
