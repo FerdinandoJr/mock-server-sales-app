@@ -3,9 +3,9 @@ import { Image } from './valuesObjects/image';
 import { Category } from './valuesObjects/category';
 import { Barcode } from './valuesObjects/barcode';
 import { Packing } from './valuesObjects/packing';
-import { PropertyValue } from './valuesObjects/property_value';
-import { Property } from './valuesObjects/property';
 import { Product } from './entities/product';
+import { AttributeValue } from './valuesObjects/property_value';
+import { Attribute } from './valuesObjects/property';
 
 // Função que usa o faker para criar dados variados
 export function generateMockProducts(count: number): Product[] {
@@ -23,22 +23,30 @@ export function generateMockProducts(count: number): Product[] {
             images: getRandomImages(),
             categories: getRandomCategories(),
             packings: createRandomPackingList(),
-            properties: createRandomPropertyList()
+            attributes: createRandomPropertyList()
         }
     });
 }
 
 const localImages = [
   'img1.jpg',
-  'img2.png',
-  'img3.webp',
-  'img4.webp',
+  'img2.jpg',
+  'img3.jpg',
+  'img4.jpg',
   'img5.jpg',
   'img6.jpg',
   'img7.jpg',
-  'img8.webp',
-  'img9.webp',
-  'img10.webp'
+  'img8.jpg',
+  'img9.jpg',
+  'img10.jpg',
+  'img11.jpg',
+  'img12.jpg',
+  'img13.jpg',
+  'img14.jpg',
+  'img15.jpg',
+  'img16.jpg',
+  'img17.jpg',
+  'img18.jpg'
 ];
 
 // Função para pegar imagem aleatória
@@ -49,7 +57,7 @@ function getRandomImages() : Image[] {
     const randomIndex = Math.floor(Math.random() * localImages.length);
     images.push({
         imageId: i + 1,
-        url: `http://192.168.254.26:3000/images/${localImages[randomIndex]}`
+        url: `http://192.168.254.167:3000/api/v1/images/${localImages[randomIndex]}`
     });
   }
   return images;
@@ -135,7 +143,7 @@ function uniqueSample<T>(arr: T[], n: number): T[] {
 }
 
 /** gera valores coerentes com o nome da propriedade */
-function createRandomPropertyValues(propName: string): PropertyValue[] {
+function createRandomPropertyValues(propName: string): AttributeValue[] {
   let pool: string[] = [];
 
   const normalized = propName.toLowerCase();
@@ -154,22 +162,22 @@ function createRandomPropertyValues(propName: string): PropertyValue[] {
 }
 
 /** cria UMA Property aleatória */
-export function createRandomProperty(propertyId: number): Property {
+export function createRandomProperty(propertyId: number): Attribute {
   const name =
     faker.helpers.maybe(() => faker.helpers.arrayElement(PROP_NAME_POOL), { probability: 0.8 }) ??
     faker.commerce.productMaterial(); // fallback
 
   return {
-    propertyId,
+    id: propertyId,
     name,
     values: createRandomPropertyValues(name),
   };
 }
 
 /** cria uma lista de Properties aleatórias (estilo createRandomPackingList) */
-export function createRandomPropertyList(): Property[] {
+export function createRandomPropertyList(): Attribute[] {
   const listLength = faker.number.int({ min: 0, max: 4 }); // até 4 propriedades
-  const props: Property[] = [];
+  const props: Attribute[] = [];
 
   // evitar repetir o mesmo nome seguidamente (opcional)
   const used = new Set<string>();
@@ -189,7 +197,7 @@ export function createRandomPropertyList(): Property[] {
     const values = createRandomPropertyValues(name);
 
     props.push({
-      propertyId: i + 1,
+      id: i + 1,
       name,
       values: values,
     });

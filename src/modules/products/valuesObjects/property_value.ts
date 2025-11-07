@@ -1,4 +1,4 @@
-export interface PropertyValue {
+export interface AttributeValue {
     id: number,
     value: string
 }

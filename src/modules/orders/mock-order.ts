@@ -103,15 +103,23 @@ function generateOrderProduct(orderId: number): OrderProduct {
 
 const localImages = [
   'img1.jpg',
-  'img2.png',
-  'img3.webp',
-  'img4.webp',
+  'img2.jpg',
+  'img3.jpg',
+  'img4.jpg',
   'img5.jpg',
   'img6.jpg',
   'img7.jpg',
-  'img8.webp',
-  'img9.webp',
-  'img10.webp'
+  'img8.jpg',
+  'img9.jpg',
+  'img10.jpg',
+  'img11.jpg',
+  'img12.jpg',
+  'img13.jpg',
+  'img14.jpg',
+  'img15.jpg',
+  'img16.jpg',
+  'img17.jpg',
+  'img18.jpg'
 ];
 
 // Função para pegar imagem aleatória
@@ -122,7 +130,7 @@ function getRandomImage() : Image[] {
     const randomIndex = Math.floor(Math.random() * localImages.length);
     images.push({
         imageId: i + 1,
-        url: `http://192.168.254.26:3000/images/${localImages[randomIndex]}`
+        url: `http://192.168.254.167:3000/api/v1/images/${localImages[randomIndex]}`
     });
   }
   return images;

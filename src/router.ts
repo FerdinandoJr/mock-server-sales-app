@@ -7,7 +7,7 @@ import products from "./modules/products/products.router";
 import orders from "./modules/orders/orders.router";
 
 
-export const apiRouter = Router();
+const apiRouter = Router();
 
 apiRouter.use("/auth", auth)
 apiRouter.use("/orders", orders)
@@ -17,3 +17,4 @@ apiRouter.use("/products", products)
 
 apiRouter.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 
+export default apiRouter

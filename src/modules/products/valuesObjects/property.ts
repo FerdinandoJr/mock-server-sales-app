@@ -1,7 +1,7 @@
-import { PropertyValue } from "./property_value"
+import { AttributeValue } from "./property_value"
 
-export interface Property {
-    propertyId: number
+export interface Attribute {
+    id: number
     name: string
-    values: PropertyValue[]
+    values: AttributeValue[]
 }
