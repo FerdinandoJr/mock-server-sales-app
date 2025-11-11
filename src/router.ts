@@ -5,7 +5,7 @@ import auth from "./modules/auth/auth.router";
 import customers from "./modules/customers/customers.router";
 import products from "./modules/products/products.router";
 import orders from "./modules/orders/orders.router";
-
+import transactions from "./modules/transactions/transactions.router";
 
 const apiRouter = Router();
 
@@ -13,7 +13,7 @@ apiRouter.use("/auth", auth)
 apiRouter.use("/orders", orders)
 apiRouter.use("/customers", customers)
 apiRouter.use("/products", products)
-
+apiRouter.use("/stockTransactions", transactions)
 
 apiRouter.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 
