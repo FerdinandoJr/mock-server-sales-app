@@ -1,10 +1,10 @@
-import { Address } from "../valueObjects/address";
-import { ContactInfo } from "../valueObjects/contact-info";
-import { CreditLimit } from "../valueObjects/credit-limit";
-import { Money } from "../valueObjects/money";
-import { PaymentMethod, PaymentMethodName } from "../valueObjects/payment-method";
-import { StateRegistration } from "../valueObjects/state-registration";
-import { TaxRegime, TaxRegimeName } from "../valueObjects/tax-regime";
+import { Address } from "../../../domain/valueObjects/address"
+import { ContactInfo } from "../../../domain/valueObjects/contact-info"
+import { CreditLimit } from "../../../domain/valueObjects/credit-limit"
+import { PaymentMethodName } from "../../../domain/valueObjects/payment-method"
+import { StateRegistration } from "../../../domain/valueObjects/state-registration"
+import { TaxRegimeName } from "../../../domain/valueObjects/tax-regime"
+
 
 export type CustomerType = 'person' | 'company'
 
@@ -13,7 +13,7 @@ export interface Customer {
   customerUuId: string
   serverId: number  
   customerCode: string
-  address: Address
+  addresses: Address[]
   isActive: boolean
   createdAt: string
   runtimeType: CustomerType

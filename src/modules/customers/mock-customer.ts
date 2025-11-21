@@ -9,24 +9,19 @@ import { Money } from '../../domain/valueObjects/money';
 import { Phone, PhoneType, PhoneTypeName } from '../../domain/valueObjects/phone';
 import { ContactInfo } from '../../domain/valueObjects/contact-info';
 import { PaymentMethod, PaymentMethodName } from '../../domain/valueObjects/payment-method';
-
+import { Address } from "../../domain/valueObjects/address";
 
 // Função que usa faker para criar dados variados
 export function generateMockCustomers(count: number): Customer[] {
   return Array.from({ length: count }, (_, i) => {
     const customerId = i + 1;
     const runtimeType: CustomerType = faker.datatype.boolean() ? 'person' : 'company';
-    const base:Customer = {
+    const base: Customer = {
       customerId,
       customerUuId: uuidv4(),
       serverId: customerId, // Id do banco de dados
       customerCode: customerId.toString().padStart(5, "0"),
-      address: {
-        state: faker.location.state(),
-        city: faker.location.city(),
-        street: faker.location.streetAddress(),
-        cep: { 'value' : faker.location.zipCode('#####-###')},
-      },
+      addresses: generateFakerAddressList(),
       paymentMethods: generateUniquePaymentMethods(),
       taxRegime: faker.helpers.arrayElement(Object.keys(TaxRegime).filter(k => isNaN(Number(k))) as TaxRegimeName[]),
       contacts: generateFakeContactList(),
@@ -179,6 +174,25 @@ function generateFakeContactList(): ContactInfo[] {
   return Array.from({ length: faker.number.int({ min: 0, max: 3 }) }, (_, i) =>
     generateFakeContactInfo(i === 0) // marca o primeiro como principal
   );
+}
+
+function generateFakerAddress(index: number): Address {
+  return {
+    state: faker.location.state(),
+    city: faker.location.city(),
+    street: faker.location.streetAddress(),
+    cep: { 'value' : faker.location.zipCode('#####-###')},    
+    district: faker.location.continent(),
+    isPrimary: index == 1,
+    number: faker.number.int({min: 100, max: 2000}),
+    type: faker.datatype.boolean() ? 'delivery' :  faker.datatype.boolean() ? 'delivery' : 'others'
+  }
+}
+
+function generateFakerAddressList(): Address[] {
+  return Array.from({length: faker.number.int({min: 1, max: 4})}, (_, i) =>  
+    generateFakerAddress(i)
+  )
 }
 
 function generateUniquePaymentMethods(): PaymentMethodName[] {
