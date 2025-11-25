@@ -1,3 +1,5 @@
+import { BrazilianState } from "./brazilian-state";
+
 export enum UF {
   AC,
   AL,
@@ -32,7 +34,7 @@ export enum UF {
 export type UFName = keyof typeof UF;
 
 export interface StateRegistration {
-    uf: UFName
+    uf: BrazilianState
     number: string | null
     isExempt: boolean
 }

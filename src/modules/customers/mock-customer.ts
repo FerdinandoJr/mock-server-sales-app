@@ -3,13 +3,14 @@ import { faker } from '@faker-js/faker';
 import { v4 as uuidv4 } from 'uuid';
 import { CompanyCustomer, Customer, CustomerType, PersonCustomer } from './entities/customer';
 import { TaxRegime, TaxRegimeName } from '../../domain/valueObjects/tax-regime';
-import { StateRegistration, UF, UFName } from '../../domain/valueObjects/state-registration';
+import { StateRegistration } from '../../domain/valueObjects/state-registration';
 import { CreditLimit } from '../../domain/valueObjects/credit-limit';
 import { Money } from '../../domain/valueObjects/money';
 import { Phone, PhoneType, PhoneTypeName } from '../../domain/valueObjects/phone';
 import { ContactInfo } from '../../domain/valueObjects/contact-info';
 import { PaymentMethod, PaymentMethodName } from '../../domain/valueObjects/payment-method';
 import { Address } from "../../domain/valueObjects/address";
+import { BrazilianState } from '../../domain/valueObjects/brazilian-state';
 
 // Função que usa faker para criar dados variados
 export function generateMockCustomers(count: number): Customer[] {
@@ -37,7 +38,7 @@ export function generateMockCustomers(count: number): Customer[] {
         ...base,
         runtimeType: 'person',
         fullName: faker.person.fullName(),
-        cpf: { 'value' :  faker.string.numeric(11)},
+        cpf: faker.string.numeric(11),
       };
       return person;
     } 
@@ -48,66 +49,67 @@ export function generateMockCustomers(count: number): Customer[] {
         legalName: faker.company.name(),
         tradeName: faker.company.name(),
         businessSector: faker.commerce.department(),
-        cnpj: { 'value' :  faker.string.numeric(14)},
+        cnpj: faker.string.numeric(14),
         stateRegistration: generateFakeStateRegistration()
       };
       return company;
   });
 }
 
-const stateRegRules: Record<UF, { size: number; format: (s: string) => string }> = {
-  [UF.AC]: { size: 13, format: s => `${s.substring(0,2)}.${s.substring(2,5)}.${s.substring(5,8)}/${s.substring(8,11)}-${s.substring(11)}` },
-  [UF.AL]: { size: 9, format: s => s },
-  [UF.AM]: { size: 9, format: s => `${s.substring(0,2)}.${s.substring(2,5)}.${s.substring(5,8)}-${s.substring(8)}` },
-  [UF.AP]: { size: 9, format: s => s },
-  [UF.BA]: { size: 9, format: s => `${s.substring(0,3)}.${s.substring(3,6)}.${s.substring(6,8)}-${s.substring(8)}` },
-  [UF.CE]: { size: 9, format: s => `${s.substring(0,8)}-${s.substring(8)}` },
-  [UF.DF]: { size: 13, format: s => `${s.substring(0,11)}-${s.substring(11)}` },
-  [UF.ES]: { size: 9, format: s => `${s.substring(0,3)}.${s.substring(3,6)}.${s.substring(6,8)}-${s.substring(8)}` },
-  [UF.GO]: { size: 9, format: s => `${s.substring(0,2)}.${s.substring(2,5)}.${s.substring(5,8)}-${s.substring(8)}` },
-  [UF.MA]: { size: 9, format: s => s },
-  [UF.MG]: { size: 13, format: s => `${s.substring(0,3)}.${s.substring(3,6)}.${s.substring(6,9)}/${s.substring(9)}` },
-  [UF.MS]: { size: 9, format: s => s },
-  [UF.MT]: { size: 9, format: s => s },
-  [UF.PA]: { size: 9, format: s => `${s.substring(0,2)}-${s.substring(2,8)}-${s.substring(8)}` },
-  [UF.PB]: { size: 9, format: s => `${s.substring(0,8)}-${s.substring(8)}` },
-  [UF.PE]: { size: 14, format: s => `${s.substring(0,2)}.${s.substring(2,3)}.${s.substring(3,6)}.${s.substring(6,13)}-${s.substring(13)}` },
-  [UF.PI]: { size: 9, format: s => s },
-  [UF.PR]: { size: 10, format: s => `${s.substring(0,8)}-${s.substring(8)}` },
-  [UF.RJ]: { size: 8, format: s => `${s.substring(0,2)}.${s.substring(2,5)}.${s.substring(5,7)}-${s.substring(7)}` },
-  [UF.RN]: { size: 9, format: s => `${s.substring(0,2)}.${s.substring(2,5)}.${s.substring(5,8)}-${s.substring(8)}` },
-  [UF.RO]: { size: 9, format: s => `${s.substring(0,3)}.${s.substring(3,8)}-${s.substring(8)}` },
-  [UF.RR]: { size: 9, format: s => `${s.substring(0,8)}-${s.substring(8)}` },
-  [UF.RS]: { size: 10, format: s => `${s.substring(0,3)}-${s.substring(3)}` },
-  [UF.SC]: { size: 9, format: s => `${s.substring(0,3)}.${s.substring(3,6)}.${s.substring(6)}` },
-  [UF.SE]: { size: 10, format: s => `${s.substring(0,9)}-${s.substring(9)}` },
-  [UF.SP]: { size: 12, format: s => `${s.substring(0,3)}.${s.substring(3,6)}.${s.substring(6,9)}.${s.substring(9)}` },
-  [UF.TO]: { size: 11, format: s => s },
+const stateRegRules: Record<BrazilianState, { size: number; format: (s: string) => string }> = {
+  [BrazilianState.AC]: { size: 13, format: s => `${s.substring(0,2)}.${s.substring(2,5)}.${s.substring(5,8)}/${s.substring(8,11)}-${s.substring(11)}` },
+  [BrazilianState.AL]: { size: 9, format: s => s },
+  [BrazilianState.AM]: { size: 9, format: s => `${s.substring(0,2)}.${s.substring(2,5)}.${s.substring(5,8)}-${s.substring(8)}` },
+  [BrazilianState.AP]: { size: 9, format: s => s },
+  [BrazilianState.BA]: { size: 9, format: s => `${s.substring(0,3)}.${s.substring(3,6)}.${s.substring(6,8)}-${s.substring(8)}` },
+  [BrazilianState.CE]: { size: 9, format: s => `${s.substring(0,8)}-${s.substring(8)}` },
+  [BrazilianState.DF]: { size: 13, format: s => `${s.substring(0,11)}-${s.substring(11)}` },
+  [BrazilianState.ES]: { size: 9, format: s => `${s.substring(0,3)}.${s.substring(3,6)}.${s.substring(6,8)}-${s.substring(8)}` },
+  [BrazilianState.GO]: { size: 9, format: s => `${s.substring(0,2)}.${s.substring(2,5)}.${s.substring(5,8)}-${s.substring(8)}` },
+  [BrazilianState.MA]: { size: 9, format: s => s },
+  [BrazilianState.MG]: { size: 13, format: s => `${s.substring(0,3)}.${s.substring(3,6)}.${s.substring(6,9)}/${s.substring(9)}` },
+  [BrazilianState.MS]: { size: 9, format: s => s },
+  [BrazilianState.MT]: { size: 9, format: s => s },
+  [BrazilianState.PA]: { size: 9, format: s => `${s.substring(0,2)}-${s.substring(2,8)}-${s.substring(8)}` },
+  [BrazilianState.PB]: { size: 9, format: s => `${s.substring(0,8)}-${s.substring(8)}` },
+  [BrazilianState.PE]: { size: 14, format: s => `${s.substring(0,2)}.${s.substring(2,3)}.${s.substring(3,6)}.${s.substring(6,13)}-${s.substring(13)}` },
+  [BrazilianState.PI]: { size: 9, format: s => s },
+  [BrazilianState.PR]: { size: 10, format: s => `${s.substring(0,8)}-${s.substring(8)}` },
+  [BrazilianState.RJ]: { size: 8, format: s => `${s.substring(0,2)}.${s.substring(2,5)}.${s.substring(5,7)}-${s.substring(7)}` },
+  [BrazilianState.RN]: { size: 9, format: s => `${s.substring(0,2)}.${s.substring(2,5)}.${s.substring(5,8)}-${s.substring(8)}` },
+  [BrazilianState.RO]: { size: 9, format: s => `${s.substring(0,3)}.${s.substring(3,8)}-${s.substring(8)}` },
+  [BrazilianState.RR]: { size: 9, format: s => `${s.substring(0,8)}-${s.substring(8)}` },
+  [BrazilianState.RS]: { size: 10, format: s => `${s.substring(0,3)}-${s.substring(3)}` },
+  [BrazilianState.SC]: { size: 9, format: s => `${s.substring(0,3)}.${s.substring(3,6)}.${s.substring(6)}` },
+  [BrazilianState.SE]: { size: 10, format: s => `${s.substring(0,9)}-${s.substring(9)}` },
+  [BrazilianState.SP]: { size: 12, format: s => `${s.substring(0,3)}.${s.substring(3,6)}.${s.substring(6,9)}.${s.substring(9)}` },
+  [BrazilianState.TO]: { size: 11, format: s => s },
 };
 
 // 🔹 Função para gerar uma inscrição estadual fake
 function generateFakeStateRegistration(): StateRegistration {
-  const ufNames = Object.keys(UF).filter(k => isNaN(Number(k))) as UFName[];
-  const ufName = faker.helpers.arrayElement(ufNames); // "SP", "MG", ...
-  const ufValue = UF[ufName as keyof typeof UF]; // 25 para "SP", p.ex.
+  const BrazilianStateNames = Object.keys(BrazilianState).filter(k => isNaN(Number(k))) as BrazilianState[];
+  const BrazilianStateName = faker.helpers.arrayElement(BrazilianStateNames); // "SP", "MG", ...
+  const BrazilianStateValue = BrazilianState[BrazilianStateName as keyof typeof BrazilianState]; // 25 para "SP", p.ex.
 
-  const { size, format } = stateRegRules[ufValue]
+  const { size, format } = stateRegRules[BrazilianStateValue]
   const raw = faker.string.numeric(size)
   const formatted = format(raw)
   const isExempt = faker.datatype.boolean() ? faker.datatype.boolean() : faker.datatype.boolean()
 
   return {
-    uf: ufName, // <- string
+    uf: BrazilianStateName, // <- string
     number: !isExempt ? formatted : null,
     isExempt: isExempt,
   };
 }
 
 // Lista básica de moedas comuns
-const currencies = ["BRL", "USD", "EUR", "GBP", "JPY", "ARS", "CLP"];
+//  "USD", "EUR", "GBP", "JPY", "ARS", "CLP"
+const currencies = ["BRL"];
 
 // 🔹 Função para gerar Money fake
-function generateFakeMoney(): Money {
+export function generateFakeMoney(): Money {
   const currency = faker.helpers.arrayElement(currencies);
   const scale = faker.number.int({ min: 0, max: 3 }); // até 4 casas decimais
   const amount = parseInt(faker.finance.amount({ min: 1, max: 100000, dec: 0 }));
@@ -162,7 +164,7 @@ function generateFakePhone(): Phone {
 function generateFakeContactInfo(isPrimary = false): ContactInfo {
   return {
     name: faker.person.fullName(),
-    email: { value: faker.internet.email() },
+    email: faker.internet.email(),
     phone: generateFakePhone(),
     isPrimary,
   };
@@ -176,12 +178,18 @@ function generateFakeContactList(): ContactInfo[] {
   );
 }
 
-function generateFakerAddress(index: number): Address {
+export function randomBrazilianState(): BrazilianState {
+  const values = Object.values(BrazilianState); // ['AC', 'AL', ...]
+  const index = Math.floor(Math.random() * values.length);
+  return values[index];
+}
+
+export function generateFakerAddress(index: number): Address {
   return {
-    state: faker.location.state(),
+    state: randomBrazilianState(),
     city: faker.location.city(),
     street: faker.location.streetAddress(),
-    cep: { 'value' : faker.location.zipCode('#####-###')},    
+    cep: faker.location.zipCode('#####-###'),    
     district: faker.location.continent(),
     isPrimary: index == 1,
     number: faker.number.int({min: 100, max: 2000}),
@@ -199,9 +207,10 @@ function generateUniquePaymentMethods(): PaymentMethodName[] {
   const types = Object.keys(PaymentMethod).filter(k => isNaN(Number(k))) as PaymentMethodName[];
 
   // embaralha os valores
-  const shuffled = faker.helpers.shuffle(types);
+  const shBrazilianStatefled = faker.helpers.shuffle(types);
 
   const count = faker.datatype.boolean() ? faker.number.int({min: 1, max: 4 }) : null
   // se não passar count, retorna todos
-  return shuffled.slice(0, count ?? types.length);
+  return shBrazilianStatefled.slice(0, count ?? types.length);
 }
+

@@ -52,4 +52,13 @@ router.get('/:id', (req, res) => {
   res.json(order);
 });
 
+router.post('/', (req, res) => {
+  const body = req.body;
+  console.log('Salvando pedido...');
+
+  console.log(body);
+
+  res.json();
+})
+
 export default router

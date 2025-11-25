@@ -6,26 +6,80 @@ import { Packing } from './valuesObjects/packing';
 import { Product } from './entities/product';
 import { AttributeValue } from './valuesObjects/property_value';
 import { Attribute } from './valuesObjects/property';
+import { ProductFiscal } from './entities/product-fiscal';
+import { groupCompanys } from '../auth/auth.router';
+import { generateFakeMoney } from '../customers/mock-customer';
 
 // Função que usa o faker para criar dados variados
 export function generateMockProducts(count: number): Product[] {
     return Array.from({ length: count }, (_, i) => {
         const productId = i + 1;
-        
+      
         return {
             productId,
             code: productId.toString().padStart(5, "0"),
             name: faker.commerce.productName(),
+            companyGroupId: faker.helpers.arrayElement(groupCompanys).groupId,
             description: faker.commerce.productDescription(),
-            price: parseFloat(faker.commerce.price({ min: 10, max: 100, dec: 2 })),
+            price: generateFakeMoney(),
             barcode: getRandomBarcode(),
             unit: getRandomUnits()[0],
             images: getRandomImages(),
             categories: getRandomCategories(),
             packings: createRandomPackingList(),
-            attributes: createRandomPropertyList()
+            attributes: createRandomPropertyList(),
+            fiscal: generateFakerProductFiscal()
         }
     });
+}
+
+// helpers genéricos
+function randomInt(min: number, max: number): number {
+  // inclusive [min, max]
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomChoice<T>(arr: T[]): T {
+  return arr[randomInt(0, arr.length - 1)];
+}
+
+function randomBool(probTrue = 0.5): boolean {
+  return Math.random() < probTrue;
+}
+
+// alguns NCM/CEST só pra exemplo
+const NCM_CODES = [
+  '01012100',
+  '02013000',
+  '04022110',
+  '06029090',
+  '10059010',
+  '21069090',
+  '30049099',
+  '61091000',
+];
+
+const CEST_CODES = [
+  '0100100',
+  '0100200',
+  '0100300',
+  '0200100',
+  '0200200',
+  '0300100',
+];
+
+export function generateFakerProductFiscal(): ProductFiscal {
+  const hasST = randomBool(0.4); // 40% das vezes com ST
+
+  return {
+    ncm: randomChoice(NCM_CODES),
+    cest: hasST ? randomChoice(CEST_CODES) : undefined,
+    origem: randomChoice([0, 1, 2, 3, 4, 5, 6, 7, 8]),
+    icmsInterno: randomChoice([7, 12, 17, 18, 25]),
+    ipi: randomBool(0.3) ? randomInt(0, 20) : undefined,
+    hasST,
+    mvaPadrao: hasST ? randomInt(10, 80) : undefined,
+  };
 }
 
 const localImages = [
@@ -57,7 +111,7 @@ function getRandomImages() : Image[] {
     const randomIndex = Math.floor(Math.random() * localImages.length);
     images.push({
         imageId: i + 1,
-        url: `http://192.168.254.11:3000/api/v1/images/${localImages[randomIndex]}`
+        url: `http://192.168.254.49:3000/api/v1/images/${localImages[randomIndex]}`
     });
   }
   return images;

@@ -26,13 +26,13 @@ export interface Customer {
 
 export interface PersonCustomer extends Customer {
   fullName: string
-  cpf: { value: string }
+  cpf: string
 }
 
 export interface CompanyCustomer extends Customer {
   legalName: string
   tradeName: string
-  cnpj: { value: string }
+  cnpj: string
   businessSector: string | null
   stateRegistration: StateRegistration
 }

@@ -1,7 +1,9 @@
 import { Router } from "express";
-import { generateMockUser } from "./mock-user";
+import { generateFakerCompanyGroupList, generateFakerCompanyList, generateMockUser } from "./mock-user";
 
 const router = Router();
+
+export const groupCompanys = generateFakerCompanyGroupList();
 
 // Usuário teste
 const fakeUsers = [
@@ -26,7 +28,10 @@ router.post('/login', (req, res) => {
     return res.status(401).json({ error: 'Invalid login' });
   }
 
-  return res.status(200).json(generateMockUser());
+  return res.status(200).json({
+    "user": generateMockUser(),
+    "groups": groupCompanys
+  });
 });
 
 export default router

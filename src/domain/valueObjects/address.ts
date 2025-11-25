@@ -4,7 +4,7 @@ export interface Address {
     state: string
     city: string
     street: string
-    cep: { value: string }
+    cep: string
     district: string
     number: number
     type: AddressType
