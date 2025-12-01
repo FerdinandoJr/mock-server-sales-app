@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Company } from "./entities/company";
 import { generateFakerAddress } from "../customers/mock-customer";
 import { CompanyGroup } from "./entities/company-group";
+import { TaxRegime, TaxRegimeName } from "../../domain/valueObjects/tax-regime";
 
 
 export function generateMockUser(): User {
@@ -41,7 +42,8 @@ export function generateFakerCompanyList(): Company[] {
             realName: faker.company.name(),
             cnpj: faker.string.numeric(14),
             address: generateFakerAddress(0),
-            isPrimary: i == 0
+            isPrimary: i == 0,
+            taxRegime: faker.helpers.arrayElement(Object.keys(TaxRegime).filter(k => isNaN(Number(k))) as TaxRegimeName[])
         }
     })
 }

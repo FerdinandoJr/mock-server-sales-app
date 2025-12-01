@@ -6,6 +6,7 @@ import customers from "./modules/customers/customers.router";
 import products from "./modules/products/products.router";
 import orders from "./modules/orders/orders.router";
 import transactions from "./modules/transactions/transactions.router";
+import tax from "./modules/tax/tax.router"
 
 const apiRouter = Router();
 
@@ -14,6 +15,7 @@ apiRouter.use("/orders", orders)
 apiRouter.use("/customers", customers)
 apiRouter.use("/products", products)
 apiRouter.use("/stockTransactions", transactions)
+apiRouter.use("/tax", tax)
 
 apiRouter.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 

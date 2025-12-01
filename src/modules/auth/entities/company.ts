@@ -1,4 +1,5 @@
 import { Address } from "../../../domain/valueObjects/address";
+import { TaxRegime } from "../../../domain/valueObjects/tax-regime";
 
 export interface Company {
     companyId: number,
@@ -6,5 +7,6 @@ export interface Company {
     realName: string,
     cnpj: string
     address: Address,
-    isPrimary: boolean
+    isPrimary: boolean,
+    taxRegime: TaxRegime
 }

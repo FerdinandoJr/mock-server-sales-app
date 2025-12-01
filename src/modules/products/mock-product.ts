@@ -105,13 +105,13 @@ const localImages = [
 
 // Função para pegar imagem aleatória
 function getRandomImages() : Image[] {
-  const count = Math.floor(Math.random() * 6); // 0 até 5
+  const count = 6; // 0 até 5
   const images = [];
   for (let i = 0; i < count; i++) {
     const randomIndex = Math.floor(Math.random() * localImages.length);
     images.push({
         imageId: i + 1,
-        url: `http://192.168.254.49:3000/api/v1/images/${localImages[randomIndex]}`
+        url: `http://192.168.254.90:3000/api/v1/images/${localImages[randomIndex]}`
     });
   }
   return images;
@@ -212,7 +212,12 @@ function createRandomPropertyValues(propName: string): AttributeValue[] {
     ? uniqueSample(pool, count)
     : Array.from({ length: count }, () => faker.commerce.productAdjective());
 
-  return values.map((v, i) => ({ id: i + 1, value: v }));
+  return values.map((v, i) => ({ 
+    id: i + 1,
+    value: v,
+    images: getRandomImages(),
+    price:  randomBool(0.5) ? generateFakeMoney() : undefined
+  }));
 }
 
 /** cria UMA Property aleatória */
@@ -230,7 +235,7 @@ export function createRandomProperty(propertyId: number): Attribute {
 
 /** cria uma lista de Properties aleatórias (estilo createRandomPackingList) */
 export function createRandomPropertyList(): Attribute[] {
-  const listLength = faker.number.int({ min: 0, max: 4 }); // até 4 propriedades
+  const listLength = randomBool(0.5) ? 0 : 4; // até 4 propriedades
   const props: Attribute[] = [];
 
   // evitar repetir o mesmo nome seguidamente (opcional)
