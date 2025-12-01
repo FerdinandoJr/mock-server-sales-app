@@ -24,7 +24,7 @@ export function generateMockProducts(count: number): Product[] {
             price: generateFakeMoney(),
             barcode: getRandomBarcode(),
             unit: getRandomUnits()[0],
-            images: getRandomImages(),
+            images: getRandomImages(productId),
             categories: getRandomCategories(),
             packings: createRandomPackingList(),
             attributes: createRandomPropertyList(),
@@ -168,14 +168,14 @@ function createRandomPackingList(): Packing[] {
     const packings: Packing[] = [];
 
     for (let i = 0; i < listLength; i++) {
-        const barcode = getRandomBarcode();
-        packings.push({
-            packingId: i + 1,
-            barcode: barcode,
-            unit: getRandomUnits()[0],
-            quantity: faker.number.int({ min: 1, max: 100 }),
-            description: faker.commerce.productDescription()
-        });
+      const barcode = getRandomBarcode();
+      packings.push({
+        packingId: i + 1,
+        barcode: barcode,
+        unit: getRandomUnits()[0],
+        quantity: faker.number.int({ min: 1, max: 100 }),
+        description: faker.commerce.productDescription()
+      });
     }
 
     return packings;

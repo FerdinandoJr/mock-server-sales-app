@@ -5,7 +5,7 @@ import { generateMockProducts } from "./mock-product";
 const router = Router();
 
 // Gera e armazena os produtos em memória apenas uma vez
-const PRODUCT_INITIAL_COUNT = 500
+const PRODUCT_INITIAL_COUNT = 15000
 // const products: Product[] = []
 const products: Product[] = generateMockProducts(PRODUCT_INITIAL_COUNT);
 
