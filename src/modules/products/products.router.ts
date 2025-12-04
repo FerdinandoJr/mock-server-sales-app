@@ -36,4 +36,17 @@ router.get('/:id', (req, res) => {
   res.json(product);
 });
 
+router.get('/count', (req, res) => {
+  const q = req.query.q?.toString().toLowerCase() || '';
+
+  // filtra produtos pelo texto (caso você tenha esse filtro)
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(q)
+  );
+
+  res.json({
+    total: filtered.length
+  });
+});
+
 export default router
