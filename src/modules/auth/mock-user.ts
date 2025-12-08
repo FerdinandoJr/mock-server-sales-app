@@ -9,7 +9,7 @@ import { TaxRegime, TaxRegimeName } from "../../domain/valueObjects/tax-regime";
 
 export function generateMockUser(): User {
     const userId = faker.number.int({ min: 1, max: 10000 })
-
+    // const userId = 1
     return {
         userId: userId,
         userCode: userId.toString().padStart(5, "0"),

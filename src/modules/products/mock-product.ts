@@ -24,7 +24,7 @@ export function generateMockProducts(count: number): Product[] {
             price: generateFakeMoney(),
             barcode: getRandomBarcode(),
             unit: getRandomUnits()[0],
-            images: getRandomImages(productId),
+            images: getRandomImages(),
             categories: getRandomCategories(),
             packings: createRandomPackingList(),
             attributes: createRandomPropertyList(),
@@ -111,7 +111,7 @@ function getRandomImages() : Image[] {
     const randomIndex = Math.floor(Math.random() * localImages.length);
     images.push({
         imageId: i + 1,
-        url: `http://192.168.254.90:3000/api/v1/images/${localImages[randomIndex]}`
+        url: `http://192.168.254.131:3000/api/v1/images/${localImages[randomIndex]}`
     });
   }
   return images;

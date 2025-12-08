@@ -8,5 +8,5 @@ export interface Company {
     cnpj: string
     address: Address,
     isPrimary: boolean,
-    taxRegime: TaxRegime
+    taxRegime: string
 }
