@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { generateMockCustomers } from "./mock-customer";
-import { Customer } from "./entities/customer";
+import { CompanyCustomer, Customer, PersonCustomer } from "./entities/customer";
 
 const router = Router();
 
@@ -56,6 +56,27 @@ router.get('/:id', (req, res) => {
   }
 
   res.json(customer);
+});
+
+router.get('/count', (req, res) => {
+  const q = req.query.q?.toString().toLowerCase() || '';
+
+  // filtra clientes pelo texto (caso você tenha esse filtro)
+  const filtered = customers.filter(c => {
+    let name = "";
+    if (c.runtimeType === "person") {
+      name = (c as PersonCustomer).fullName.toLocaleLowerCase();
+    } else {
+      const company = c as CompanyCustomer;
+      name = (company.tradeName || company.legalName).toLocaleLowerCase();
+    }
+
+    return name.includes(q);
+  });
+
+  res.json({
+    total: filtered.length
+  });
 });
 
 
