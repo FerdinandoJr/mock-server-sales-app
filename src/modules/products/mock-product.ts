@@ -9,6 +9,7 @@ import { Attribute } from './valuesObjects/property';
 import { ProductFiscal } from './entities/product-fiscal';
 import { groupCompanys } from '../auth/auth.router';
 import { generateFakeMoney } from '../customers/mock-customer';
+import { randomUUID } from 'crypto';
 
 // Função que usa o faker para criar dados variados
 export function generateMockProducts(count: number): Product[] {
@@ -110,11 +111,11 @@ function getRandomImages() : Image[] {
   for (let i = 0; i < count; i++) {
     const randomIndex = Math.floor(Math.random() * localImages.length);
     images.push({
-        imageId: i + 1,
-        url: `http://192.168.254.131:3000/api/v1/images/${localImages[randomIndex]}`
+      code: `${randomUUID()}`,
+      url: `http://192.168.254.181:3000/api/v1/images/${localImages[randomIndex]}`
     });
   }
-  return images;
+  return images
 }
 
 function getRandomUnits() {
