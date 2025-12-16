@@ -1,7 +1,7 @@
 export interface Storage {
    storageId: number,
-   name: String,
-   description: String,
+   name: string,
+   description: string,
    isActive: boolean,
    updateAt: Date
 }

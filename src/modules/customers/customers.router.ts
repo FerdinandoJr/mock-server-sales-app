@@ -5,8 +5,8 @@ import { CompanyCustomer, Customer, PersonCustomer } from "./entities/customer";
 const router = Router();
 
 // 1) Gera e armazena em memória apenas uma vez
-const INITIAL_COUNT = 2000
-const customers: Customer[] = generateMockCustomers(INITIAL_COUNT);
+const CUSTOMER_INITIAL_COUNT = 2000
+const customers: Customer[] = generateMockCustomers(CUSTOMER_INITIAL_COUNT);
 
 // Rota paginada para obter clientes por intervalo de índices
 router.get('/', (req, res) => {  
