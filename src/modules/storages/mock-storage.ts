@@ -10,7 +10,7 @@ export function generateMockStorages(count: number): Storage[] {
          name: faker.company.name(),
          description: faker.company.catchPhraseDescriptor(),
          isActive: getActive(),
-         updateAt: new Date(getTodayDate()), // Rever isso aqui
+         updatedAt: getTodayDate(), // Rever isso aqui
       }
    });
 }

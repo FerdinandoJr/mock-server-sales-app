@@ -3,5 +3,5 @@ export interface Storage {
    name: string,
    description: string,
    isActive: boolean,
-   updateAt: Date
+   updatedAt: Date
 }
