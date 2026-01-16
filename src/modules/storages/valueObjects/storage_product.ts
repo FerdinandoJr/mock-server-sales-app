@@ -1,5 +1,4 @@
 export interface StorageProduct {
-  storageProductId: number,
-  productName: string,
+  productId: number,
   quantity: number,
 }
